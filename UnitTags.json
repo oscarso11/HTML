@@ -1,0 +1,534 @@
+{
+  "Golden Freddy": {
+    "Tags": [
+      "Stun",
+      "DPS"
+    ]
+  },
+  "Nightmare Fredbear": {
+    "Tags": [
+      "Slowing",
+      "Stun",
+      "DPS",
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Old Man Consequences": {
+    "Tags": [
+      "Stun",
+      "DPS",
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Puppet": {
+    "Tags": [
+      "Slowing",
+      "Booster"
+    ]
+  },
+  "Springtrap": {
+    "Tags": []
+  },
+  "Astral Bonnie": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Dragon Endo 01": {
+    "Tags": [
+      "DPS",
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Frozen King Foxy": {
+    "Tags": [
+      "Slowing",
+      "DPS",
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Headless Horseman Mangle": {
+    "Tags": [
+      "DPS",
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Yeti Oni Bonnie": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Amalgam": {
+    "Tags": [
+      "Slowing",
+      "Stun",
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Bear5": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Blighted Endo Freddy": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Blossom Chica": {
+    "Tags": []
+  },
+  "Cursed Jester Spring Bonnie": {
+    "Tags": []
+  },
+  "Deadeye Freddy": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Dreadbear": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Gravelord Foxy": {
+    "Tags": []
+  },
+  "Grinch Foxy": {
+    "Tags": [
+      "Meta"
+    ]
+  },
+  "Hades Bonnie": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Leviathan Mangle": {
+    "Tags": [
+      "Slowing",
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Lich Shadow Bonnie": {
+    "Tags": [
+      "Stun",
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Masked Bullies": {
+    "Tags": [
+      "KnockBack",
+      "Meta"
+    ]
+  },
+  "Nightmare Mangle": {
+    "Tags": [
+      "Stun",
+      "Meta"
+    ]
+  },
+  "Purple Guy": {
+    "Tags": []
+  },
+  "Scrooge Freddy": {
+    "Tags": []
+  },
+  "Shark Withered Foxy": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Spring Duo": {
+    "Tags": [
+      "DPS",
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Thanatos": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Time Lord Withered Freddy": {
+    "Tags": [
+      "Stun"
+    ]
+  },
+  "Valkyrie Chica": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Withered Golden Freddy": {
+    "Tags": [
+      "Slowing"
+    ]
+  },
+  "Cloaked Sparky": {
+    "Tags": []
+  },
+  "Conductor Toy Freddy": {
+    "Tags": []
+  },
+  "Crying Child": {
+    "Tags": [
+      "Slowing",
+      "Meta"
+    ]
+  },
+  "Frosty the Snowcake": {
+    "Tags": [
+      "Slowing"
+    ]
+  },
+  "Hacker King RWQFSFASXC": {
+    "Tags": [
+      "Slowing"
+    ]
+  },
+  "Luminary Reporter Shadow Bonnie": {
+    "Tags": []
+  },
+  "Mangle": {
+    "Tags": [
+      "Stun",
+      "Meta"
+    ]
+  },
+  "Mecha Cupcake": {
+    "Tags": [
+      "DPS"
+    ]
+  },
+  "Movie Director Freddy": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Nightmarionne": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Party Glock Freddy": {
+    "Tags": []
+  },
+  "Party Packer Cupcake": {
+    "Tags": []
+  },
+  "Phone Dude": {
+    "Tags": [
+      "DPS"
+    ]
+  },
+  "Popcorn Bot": {
+    "Tags": [
+      "DPS",
+      "Booster",
+      "KnockBack",
+      "Meta"
+    ]
+  },
+  "Popeyes Toy Freddy": {
+    "Tags": []
+  },
+  "Puppet's Alliance": {
+    "Tags": []
+  },
+  "Rockin Bonnie": {
+    "Tags": [
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Scarecrow Freddy": {
+    "Tags": [
+      "Slowing",
+      "Booster"
+    ]
+  },
+  "Shadow Knight Freddy": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Shepherd Fredbear": {
+    "Tags": []
+  },
+  "Slasher Bonnie": {
+    "Tags": []
+  },
+  "Sweetheart Toy Foxy": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Tidal Wailer Crying Child": {
+    "Tags": [
+      "Slowing"
+    ]
+  },
+  "Toy Maker Mangle": {
+    "Tags": []
+  },
+  "Turkey Chica": {
+    "Tags": []
+  },
+  "UFO Tangle": {
+    "Tags": []
+  },
+  "War Machine Foxy": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Balloon Boy": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Barbarian Boy": {
+    "Tags": []
+  },
+  "Cerberus Freddy": {
+    "Tags": [
+      "KnockBack"
+    ]
+  },
+  "Endo 02": {
+    "Tags": []
+  },
+  "Follow Me": {
+    "Tags": [
+      "DPS",
+      "KnockBack",
+      "Meta"
+    ]
+  },
+  "Freddles": {
+    "Tags": []
+  },
+  "Freddy Fastbear": {
+    "Tags": [
+      "Slowing"
+    ]
+  },
+  "Frostmancer Withered Bonnie": {
+    "Tags": [
+      "Slowing",
+      "Stun",
+      "Meta"
+    ]
+  },
+  "Hag Withered Chica": {
+    "Tags": []
+  },
+  "Harlequin Mangle": {
+    "Tags": []
+  },
+  "Jack'O Bonnie": {
+    "Tags": []
+  },
+  "Krampus Purple Guy": {
+    "Tags": [
+      "Stun"
+    ]
+  },
+  "Nightmare BB": {
+    "Tags": [
+      "DPS",
+      "Meta"
+    ]
+  },
+  "Nightmare Chica": {
+    "Tags": [
+      "Slowing",
+      "Booster"
+    ]
+  },
+  "Overgrown Foxy": {
+    "Tags": [
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Phantom Bonnie": {
+    "Tags": []
+  },
+  "Phantom Mangle": {
+    "Tags": []
+  },
+  "Plushtrap": {
+    "Tags": [
+      "DPS"
+    ]
+  },
+  "Psychic Friend Fredbear": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Serpent Endo": {
+    "Tags": [
+      "Slowing"
+    ]
+  },
+  "Shadow Bonnie": {
+    "Tags": []
+  },
+  "Shadow Freddy": {
+    "Tags": []
+  },
+  "Starfarer Princess": {
+    "Tags": [
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Tarnished Spring Bonnie": {
+    "Tags": []
+  },
+  "Withered Foxy": {
+    "Tags": []
+  },
+  "Withered Freddy": {
+    "Tags": []
+  },
+  "BBnJ": {
+    "Tags": []
+  },
+  "Breadbear": {
+    "Tags": []
+  },
+  "Clockwork Cupcake": {
+    "Tags": []
+  },
+  "Endo 01": {
+    "Tags": []
+  },
+  "Fazcade": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Golden Cupcake": {
+    "Tags": [
+      "Booster",
+      "Meta"
+    ]
+  },
+  "Mrs Claus Toy Chica": {
+    "Tags": []
+  },
+  "Nightmare Endo": {
+    "Tags": []
+  },
+  "Nightmare Foxy": {
+    "Tags": []
+  },
+  "Phantom BB": {
+    "Tags": []
+  },
+  "Phantom Foxy": {
+    "Tags": []
+  },
+  "Soul Prisoner Foxy": {
+    "Tags": []
+  },
+  "Toy Chica": {
+    "Tags": []
+  },
+  "Withered Bonnie": {
+    "Tags": []
+  },
+  "Cupcake": {
+    "Tags": [
+      "Booster"
+    ]
+  },
+  "Dead Soul Freddy": {
+    "Tags": []
+  },
+  "Fisherman Toy Bonnie": {
+    "Tags": []
+  },
+  "John Pigpatch": {
+    "Tags": []
+  },
+  "Nightmare Bonnie": {
+    "Tags": []
+  },
+  "Nightmare Cupcake": {
+    "Tags": []
+  },
+  "Phantom Chica": {
+    "Tags": []
+  },
+  "Santa Freddy": {
+    "Tags": []
+  },
+  "Toy Bonnie": {
+    "Tags": []
+  },
+  "Toy Freddy": {
+    "Tags": []
+  },
+  "Withered Chica": {
+    "Tags": []
+  },
+  "Hor Hor Freddy": {
+    "Tags": []
+  },
+  "JJ": {
+    "Tags": []
+  },
+  "Nightmare Freddy": {
+    "Tags": []
+  },
+  "PaperPals": {
+    "Tags": []
+  },
+  "Phantom Freddy": {
+    "Tags": []
+  },
+  "Undead Chica": {
+    "Tags": []
+  },
+  "Bonnie": {
+    "Tags": []
+  },
+  "Chica": {
+    "Tags": []
+  },
+  "Foxy": {
+    "Tags": []
+  },
+  "Freddy": {
+    "Tags": []
+  },
+  "Freddy With a Glock": {
+    "Tags": []
+  }
+}

@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meta Makers</title>
+    <style>
+        body {
+            color: azure;
+            background-color: black;
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        .banner {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .unit-slot {
+            width: 100px; 
+            height: 100px; 
+            border: 3px solid white; 
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            object-fit: cover;
+        }
+
+        .unit-slot:hover {
+            border-color: azure;
+        }
+
+        .broken-image {
+            opacity: 0.6 !important;
+            position: relative;
+        }
+
+        .broken-image::after {
+            content: '❌';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #ff4444;
+            z-index: 10;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slot-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .slot-container:hover {
+            transform: scale(1.05);
+        }
+
+        .slot-container .unit-slot {
+            width: 100%;
+            height: 100%;
+        }
+
+        .slot-container .enchant-badge {
+            position: absolute;
+            top: 6px;
+            right: 0px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .slot-container .enchant-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .slot-container .enchant-badge.visible {
+            display: flex;
+        }
+
+        .slot-container .element-badge {
+            position: absolute;
+            bottom: -20px;
+            left: -14px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: transparent;
+            border: none;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 5;
+            font-size: 15px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .slot-container .element-badge img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .slot-container .element-badge.visible {
+            display: flex;
+        }
+
+
+
+        .delete-btn {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            width: 28px;
+            height: 28px;
+            background: #ff4d4d;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .info-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 28px;
+            height: 28px;
+            background: #4d4dff;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            font-weight: bold;
+        }
+
+        .delete-team-btn:hover {
+            background: #ff2222;
+        }
+
+        .slot-container.filled:hover .delete-btn {
+            display: flex;
+        }
+
+        .slot-container.filled:hover .info-btn {
+            display: flex;
+        }
+
+        .overlay-style {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85); 
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-box {
+            background: #000000;
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid #444;
+            text-align: center;
+            min-width: 75%;
+            max-height: 90vh;
+            overflow: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        #UnitSelection .popup-box {
+            width: 90%;
+            max-width: none;
+            height: 90vh;
+            min-width: unset;
+            max-height: unset;
+        }
+
+        .popup-box::-webkit-scrollbar {
+            display: none;
+        }
+
+        .close-btn {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: #ff4d4d;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .popup-close-btn:hover {
+            background: #ff2222;
+        }
+
+        .toggle-slider {
+            display: inline-flex;
+            background: #333;
+            border: 2px solid #666;
+            border-radius: 25px;
+            padding: 4px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            width: 180px;
+            height: 40px;
+            tabindex: 0;
+        }
+
+        .toggle-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #aaa;
+            z-index: 2;
+            transition: color 0.3s;
+            pointer-events: none;
+        }
+
+        .toggle-slider:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .toggle-indicator {
+            position: absolute;
+            width: 50%;
+            height: calc(100% - 8px);
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            left: 4px;
+            top: 4px;
+            transition: left 0.3s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .toggle-slider.shiny .toggle-indicator {
+            left: calc(50% + 4px);
+        }
+
+        .toggle-slider.shiny .toggle-option:first-child {
+            color: #aaa;
+        }
+
+        .toggle-slider.shiny .toggle-option:last-child {
+            color: #FFD700;
+        }
+
+        .toggle-slider .toggle-option:first-child {
+            color: #00D7FF;
+        }
+
+        .toggle-slider.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .element-slider {
+            display: inline-flex;
+            background: #333;
+            border: 2px solid #666;
+            border-radius: 8px;
+            padding: 0;
+            cursor: pointer;
+            user-select: none;
+            gap: 0;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .element-option {
+            flex: 0 1 auto;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #aaa;
+            transition: color 0.3s, background-color 0.3s;
+            border: 1px solid transparent;
+            min-width: fit-content;
+        }
+
+        .element-option:hover {
+            background-color: rgba(100, 100, 100, 0.3);
+        }
+
+        .element-option.active {
+            color: #00D7FF;
+            background-color: rgba(0, 215, 255, 0.2);
+        }
+
+        .enchant-table {
+            width: fit-content;
+            border-collapse: collapse;
+            margin: 10px auto 0;
+        }
+
+        .enchant-table td {
+            padding: 8px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .enchant-btn {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            border: 2px solid #444;
+            background: #111;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .enchant-btn.selected {
+            border-color: #FFD700;
+            transform: scale(1.05);
+        }
+
+        .enchant-btn img {
+            width: 90%;
+            height: 90%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .enchant-label {
+            margin-top: 6px;
+            font-size: 12px;
+            color: azure;
+            text-align: center;
+        }
+
+        .passive-box {
+            background: rgba(50, 50, 80, 0.6);
+            border: 1px solid #666;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 20px 0;
+            text-align: left;
+            display: none;
+            max-width: 100%;
+        }
+
+        .passive-box.visible {
+            display: block;
+        }
+
+        .passive-box h4 {
+            margin: 0 0 8px 0;
+            color: #FFD700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .passive-box p {
+            margin: 0;
+            font-size: 13px;
+            color: azure;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .actives-box {
+            background: rgba(80, 50, 50, 0.6);
+            border: 1px solid #666;
+            border-radius: 8px;
+            padding: 12px;
+            max-width: 100%;
+            margin: 20px 0;
+            text-align: left;
+            display: none;
+        }
+
+        .actives-box.visible {
+            display: block;
+        }
+
+        .actives-box h4 {
+            margin: 0 0 8px 0;
+            color: #FF6B6B;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .actives-box p {
+            margin: 0;
+            font-size: 13px;
+            color: azure;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
+        #unitGrid::-webkit-scrollbar {
+            width: 0px;
+        }
+
+        #unitGrid::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #unitGrid::-webkit-scrollbar-thumb {
+            background: transparent;
+        }
+
+        #unitGrid {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #111;">
+        <h1 style="color: white; margin: 0;">Meta Makers | Team Maker</h1>
+        <div style="display: flex; gap: 20px;">
+            <button onclick="location.href='Home.html'" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 16px;">Home</button>
+            <button onclick="location.href='Units.html'" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 16px;">Units</button>
+            <button onclick="location.href='Credits.html'" style="background: transparent; color: white; border: none; cursor: pointer; font-size: 16px;">Credits</button>
+        </div>
+    </div>
+
+    <img src="images/MetaMakers.png" class="banner" alt="Meta Makers Banner">
+
+<div style="text-align: center; width: 100%;">
+        <div id="teamsContainer">
+            <div id="saveLoadPanel" style="margin-bottom: 30px;">
+    <div style="display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: nowrap;">
+                    <input id="teamNameInput" placeholder="Team name" style="padding: 10px 12px; border-radius: 6px; border: 1px solid #666; background: #222; color: white; font-size: 14px;">
+                    <button onclick="saveTeam()" style="background: #4CAF50; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap;">Save</button>
+                    <button onclick="clearTeams()" style="background: #ff4d4d; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap;">Clear</button>
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <select id="savedTeamsList" style="padding: 10px 12px; border-radius: 6px; border: 1px solid #666; background: #222; color: white; font-size: 14px; min-width: 150px;">
+                            <option value="">Select team</option>
+                        </select>
+                        <button onclick="loadTeam()" style="background: #2196F3; color: white; border: none; padding: 10px 12px; border-radius: 6px; cursor: pointer; font-weight: bold;">Load</button>
+                        <button onclick="deleteSavedTeam()" style="background: #f44336; color: white; border: none; padding: 10px 12px; border-radius: 6px; cursor: pointer; font-weight: bold;">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <div class="team-section">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 10px;">
+                    <h1 style="margin: 0;">Team 1</h1>
+                </div>
+            <div class="row" data-team="1">
+                <div class="slot-container"><img src="images/Plus.png" class="unit-slot" onclick="openGrid(this)" onerror="this.classList.add('broken-image'); console.error('Slot img failed:', this.src);"><div class="enchant-badge"></div><div class="element-badge"></div><button class="delete-btn" onclick="clearSlot(event)">×</button><button class="info-btn" onclick="showUnitInfo(event)">i</button></div>
+                <div class="slot-container"><img src="images/Plus.png" class="unit-slot" onclick="openGrid(this)" onerror="this.classList.add('broken-image'); console.error('Slot img failed:', this.src);"><div class="enchant-badge"></div><div class="element-badge"></div><button class="delete-btn" onclick="clearSlot(event)">×</button><button class="info-btn" onclick="showUnitInfo(event)">i</button></div>
+                <div class="slot-container"><img src="images/Plus.png" class="unit-slot" onclick="openGrid(this)" onerror="this.classList.add('broken-image'); console.error('Slot img failed:', this.src);"><div class="enchant-badge"></div><div class="element-badge"></div><button class="delete-btn" onclick="clearSlot(event)">×</button><button class="info-btn" onclick="showUnitInfo(event)">i</button></div>
+                <div class="slot-container"><img src="images/Plus.png" class="unit-slot" onclick="openGrid(this)" onerror="this.classList.add('broken-image'); console.error('Slot img failed:', this.src);"><div class="enchant-badge"></div><div class="element-badge"></div><button class="delete-btn" onclick="clearSlot(event)">×</button><button class="info-btn" onclick="showUnitInfo(event)">i</button></div>
+                <div class="slot-container"><img src="images/Plus.png" class="unit-slot" onclick="openGrid(this)" onerror="this.classList.add('broken-image'); console.error('Slot img failed:', this.src);"><div class="enchant-badge"></div><div class="element-badge"></div><button class="delete-btn" onclick="clearSlot(event)">×</button><button class="info-btn" onclick="showUnitInfo(event)">i</button></div>
+                <div class="slot-container"><img src="images/Plus.png" class="unit-slot" onclick="openGrid(this)"><div class="enchant-badge"></div><div class="element-badge"></div><button class="delete-btn" onclick="clearSlot(event)">×</button><button class="info-btn" onclick="showUnitInfo(event)">i</button></div>
+            </div>
+            </div>
+            <button id="addTeamBtn" onclick="addTeam()" style="background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; cursor: pointer; margin: 20px 0; display: block; margin-left: auto; margin-right: auto;">Add Team</button>
+
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="UnitSelection" class="overlay-style">
+        <div class="popup-box" style="position: relative;">
+            <button class="popup-close-btn" onclick="closeGrid()">×</button>
+            <div style="text-align: center; margin-bottom: 20px; padding: 0 20px;">
+
+                <div class="element-slider" id="elementFilter">
+                    <div class="element-option active" data-element="All" onclick="selectElement(this)">All</div>
+                    <div class="element-option" data-element="Neutral" onclick="selectElement(this)">Neutral</div>
+                    <div class="element-option" data-element="Nature" onclick="selectElement(this)">Nature</div>
+                    <div class="element-option" data-element="Fire" onclick="selectElement(this)">Fire</div>
+                    <div class="element-option" data-element="Water" onclick="selectElement(this)">Water</div>
+                    <div class="element-option" data-element="Electricity" onclick="selectElement(this)">Electricity</div>
+                    <div class="element-option" data-element="Rust" onclick="selectElement(this)">Rust</div>
+                    <div class="element-option" data-element="Light" onclick="selectElement(this)">Light</div>
+                    <div class="element-option" data-element="Dark" onclick="selectElement(this)">Dark</div>
+                </div>
+                <div id="tagFilterContainer" style="margin-top: 15px;">
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <strong style="color: azure; font-size: 14px;">Tags:</strong>
+                    </div>
+                    <div class="element-slider" id="tagFilter">
+                        <div class="element-option active" data-tag="All" onclick="selectTag(this)">All</div>
+                    </div>
+                </div>
+            </div>
+            <div id="unitGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 25px; padding: 20px; max-height: 90vh; overflow-y: auto;">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="UnitDetail" class="overlay-style">
+        <div class="popup-box" style="min-width: auto; max-width: 500px; min-height: auto;">
+            <h2 id="detailName">Unit Name</h2>
+        <img id="detailImg" src="" alt="" style="width: 150px; height: 150px; object-fit: contain; margin: 20px 0; border-radius: 8px;" onerror="this.classList.add('broken-image'); console.error('Detail img failed:', this.src); this.src='images/Plus.png';">
+            
+            <div id="activesBox" class="actives-box">
+                <h4>Actives</h4>
+                <p id="activesText"></p>
+            </div>
+            
+            <div id="passiveBox" class="passive-box">
+                <h4>Passive</h4>
+                <p id="passiveText"></p>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <div class="toggle-slider" id="shinyToggle">
+                    <div class="toggle-indicator"></div>
+                    <div class="toggle-option">Normal</div>
+                    <div class="toggle-option">Shiny</div>
+                </div>
+            </div>
+
+            <div id="enchantSection" style="margin: 20px 0; text-align: center;">
+                <h3 style="margin: 0 0 12px 0; color: azure; font-size: 18px;">Enchant</h3>
+                <table id="enchantTable" class="enchant-table"></table>
+            </div>
+            
+            <div id="buttonGroup" style="display: flex; gap: 10px; justify-content: center;">
+                <button class="close-btn" onclick="addUnit()" style="background: #4CAF50;">Add Unit</button>
+                <button class="close-btn" onclick="closeDetail()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+let slot = null;
+        let units = null;
+let selectedElement = 'All';
+let selectedTags = [];
+let unitTags = {};
+        let selectedUnitName = null;
+        let selectedUnitImg = null;
+        let isShinySelected = false;
+let selectedEnchantName = 'None';
+let nextTeamNumber = 2;
+
+async function loadUnitTags() {
+            const response = await fetch('./UnitTags.json');
+            const text = await response.text();
+            try {
+                unitTags = JSON.parse(text);
+                console.log('UnitTags loaded:', Object.keys(unitTags).length, 'units');
+            } catch (e) {
+                console.error('JSON parse failed:', e);
+                unitTags = {};
+            }
+            populateTagFilters();
+        }
+
+function populateTagFilters() {
+            console.log('populateTagFilters called - unitTags keys:', Object.keys(unitTags).length);
+            const tagFilter = document.getElementById('tagFilter');
+            if (!tagFilter) {
+                console.error('tagFilter element not found');
+                return;
+            }
+            console.log('Clearing tagFilter');
+            tagFilter.innerHTML = '<div class="element-option active" data-tag="All" onclick="selectTag(this)">All</div>';
+            
+            const uniqueTags = new Set();
+            Object.values(unitTags).forEach(unit => {
+                if (unit.Tags && Array.isArray(unit.Tags)) {
+                    unit.Tags.forEach(tag => uniqueTags.add(tag));
+                }
+            });
+            console.log('Unique tags found:', Array.from(uniqueTags));
+            
+            uniqueTags.forEach(tag => {
+                const option = document.createElement('div');
+                option.className = 'element-option';
+                option.dataset.tag = tag;
+                option.textContent = tag;
+                option.onclick = () => selectTag(option);
+                tagFilter.appendChild(option);
+            });
+            
+            console.log('Tag filters populated:', uniqueTags.size, 'unique tags');
+        }
+        let selectedEnchantImg = '';
+
+const elementColors = {
+            'Neutral': '#A9A9A9',
+            'Nature': '#228B22',
+            'Fire': '#FF4500',
+            'Water': '#1E90FF',
+            'Electricity': '#FFD700',
+            'Rust': '#8B4513',
+            'Light': '#FFFF00',
+            'Dark': '#4B0082'
+        };
+
+const tagColors = {
+    'Stun': '#FF6B6B',
+    'DPS': '#FFD700',
+    'Slowing': '#00D7FF',
+    'Booster': '#4CAF50',
+    'Meta': '#FF9800',
+    'KnockBack': '#9C27B0'
+};
+
+        const elements = {
+            'Neutral': 'images/Elements/Neutral.png',
+            'Nature': 'images/Elements/Nature.png',
+            'Fire': 'images/Elements/Fire.png',
+            'Water': 'images/Elements/Water.png',
+            'Electricity': 'images/Elements/Electricity.png',
+            'Rust': 'images/Elements/Rust.png',
+            'Light': 'images/Elements/Light.png',
+            'Dark': 'images/Elements/Dark.png',
+            'Dark-light': 'images/Elements/Dark-light.png'
+        };
+
+        const enchantments = [
+            { name: 'Engineer', img: 'images/Enchants/Engineer.png' },
+            { name: 'Puppets Nightmare', img: 'images/Enchants/PuppetNightmare.png' },
+            { name: 'Investor', img: 'images/Enchants/Investor.png' },
+            { name: 'Haywire', img: 'images/Enchants/Haywire.png' },
+            { name: 'Phantom', img: 'images/Enchants/Phantom.png' },
+            { name: 'Blighted', img: 'images/Enchants/Blighted.png' },
+            { name: 'Springlocked', img: 'images/Enchants/Springlocked.png' },
+            { name: 'Shadow', img: 'images/Enchants/Shadow.png' },
+            { name: 'Vengeance', img: 'images/Enchants/Vengeance.png' },
+            { name: 'Champion', img: 'images/Enchants/Champion.png' },
+        ];
+
+        const raritySort = {
+            'Hero': 1, 'Apex': 2, 'Exclusive': 4, 'Nightmare': 3, 'Secret': 5,
+            'Mythical': 6, 'Epic': 7, 'Rare': 8, 'Uncommon': 9, 'Common': 10
+        };
+
+        const rarityGradient = {
+            'Hero': ['#655b16', '#545626'],
+            'Apex': ['#6423a6', '#274ad8'],
+            'Exclusive': ['#2fd8ea', '#154874'],
+            'Nightmare': ['#3c226f', '#322056'],
+            'Secret': ['#ff5905', '#ff2b09'],
+            'Mythical': ['#ffd513', '#ffec09'],
+            'Epic': ['#d121db', '#a70eb9'],
+            'Rare': ['#417ddb', '#2c57b9'],
+            'Uncommon': ['#51ff65', '#45ff80']
+        };
+
+function sanitizeFilename(name) {
+            return name.replace(/ /g, '_').replace(/[^\w'-]/g, '_');
+        }
+
+        async function getUnits() {
+            try {
+                const res = await fetch('https://raw.githubusercontent.com/UGAccount/FNTD2/refs/heads/main/Info');
+                const data = await res.json();
+                units = data.Units;
+                return units;
+            } catch (error) {
+                console.error('Failed to fetch units:', error);
+                return null;
+            }
+        }
+
+        function createElementBadgeContent(elementName, elementBadge) {
+            const elementColor = elementColors[elementName] || '#666666';
+            const elementImg = elements[elementName];
+            
+            if (elementImg) {
+                const img = document.createElement('img');
+                img.src = elementImg;
+                img.alt = elementName;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '50%';
+                img.onerror = () => {
+                    img.style.display = 'none';
+                    const elementText = document.createElement('span');
+                    elementText.textContent = elementName.substring(0, 1).toUpperCase();
+                    elementText.style.textShadow = `0 0 3px ${elementColor}`;
+                    elementBadge.appendChild(elementText);
+                };
+                elementBadge.appendChild(img);
+            } else {
+                const elementText = document.createElement('span');
+                elementText.textContent = elementName.substring(0, 1).toUpperCase();
+                elementText.style.textShadow = `0 0 3px ${elementColor}`;
+                elementBadge.appendChild(elementText);
+            }
+        }
+
+        function getDisplayElementName(unitElement) {
+            if (Array.isArray(unitElement)) {
+                if (unitElement.includes('Dark') && unitElement.includes('Light')) {
+                    return 'Dark-light';
+                }
+                return unitElement[0];
+            }
+            return unitElement;
+        }
+
+        function selectElement(element) {
+            const options = document.querySelectorAll('.element-option');
+            options.forEach(opt => opt.classList.remove('active'));
+            element.classList.add('active');
+            selectedElement = element.dataset.element;
+            showGrid();
+        }
+
+function selectTag(tagElement) {
+            const tagName = tagElement.dataset.tag;
+            
+            if (tagName === 'All') {
+                document.querySelectorAll('#tagFilter .element-option').forEach(opt => opt.classList.remove('active'));
+                tagElement.classList.add('active');
+                selectedTags = [];
+            } else {
+                const index = selectedTags.indexOf(tagName);
+                if (index > -1) {
+                    selectedTags.splice(index, 1);
+                    tagElement.classList.remove('active');
+                    if (selectedTags.length === 0) {
+                        const allTag = document.querySelector('#tagFilter [data-tag="All"]');
+                        if (allTag) allTag.classList.add('active');
+                    }
+                } else {
+                    selectedTags.push(tagName);
+                    tagElement.classList.add('active');
+                    const allTag = document.querySelector('#tagFilter [data-tag="All"]');
+                    if (allTag) allTag.classList.remove('active');
+                }
+            }
+            
+            console.log('Selected tags:', selectedTags);
+            showGrid();
+        }
+
+function clearTags() {
+            document.querySelectorAll('#tagFilter .element-option').forEach(opt => opt.classList.remove('active'));
+            const allTag = document.querySelector('#tagFilter [data-tag="All"]');
+            if (allTag) allTag.classList.add('active');
+            selectedTags = [];
+            console.log('Tags cleared to All');
+            showGrid();
+        }
+
+        async function showGrid() {
+            const grid = document.getElementById('unitGrid');
+            grid.innerHTML = '';
+
+            if (!units) {
+                units = await getUnits();
+            }
+
+            if (!units) {
+                grid.innerHTML = '<p>Error loading units</p>';
+                return;
+            }
+
+            const sortedUnits = [...units].sort((a, b) => {
+                const rarityRankA = raritySort[a.Rarity] || 999;
+                const rarityRankB = raritySort[b.Rarity] || 999;
+                return rarityRankA - rarityRankB;
+            });
+
+            sortedUnits.forEach(unit => {
+                if (selectedElement !== 'All') {
+                    const unitElement = unit.Element || unit.Elements;
+                    if (!unitElement) return;
+                    
+                    if (Array.isArray(unitElement)) {
+                        if (!unitElement.includes(selectedElement)) return;
+                    } else {
+                        if (unitElement !== selectedElement) return;
+                    }
+                }
+                const unitName = unit.Name;
+                if (selectedTags.length > 0 && !selectedTags.includes('All')) {
+                    const unitTagsList = unitTags[unitName]?.Tags || [];
+                    const hasAllSelectedTags = selectedTags.every(selectedTag => unitTagsList.includes(selectedTag));
+                    if (!hasAllSelectedTags) return;
+                }
+
+                const unitImg = `images/Units/${sanitizeFilename(unitName)}.png`;
+                const [color1, color2] = rarityGradient[unit.Rarity] || ['#666666', '#333333'];
+                
+                const card = document.createElement('div');
+                card.style.cursor = 'pointer';
+                card.style.textAlign = 'center';
+                card.style.transition = 'transform 0.2s';
+                card.style.position = 'relative';
+                
+                const imgWrapper = document.createElement('div');
+                imgWrapper.style.padding = '2px';
+                imgWrapper.style.borderRadius = '6px';
+                imgWrapper.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+                imgWrapper.style.width = 'fit-content';
+                imgWrapper.style.margin = '0 auto';
+                imgWrapper.style.position = 'relative';
+                
+                const imgElement = document.createElement('img');
+                imgElement.src = unitImg;
+                imgElement.alt = unitName;
+                imgElement.style.width = '100px';
+                imgElement.style.height = '100px';
+                imgElement.style.objectFit = 'cover';
+                imgElement.style.borderRadius = '4px';
+                imgElement.style.display = 'block';
+                imgElement.style.background = '#000';
+                imgElement.onerror = () => {
+                    console.error('Failed to load:', imgElement.src);
+                    imgElement.classList.add('broken-image');
+                    imgElement.style.opacity = '0.6';
+                };
+                imgElement.onclick = () => pick(unitName, unitImg);
+                
+                const nameLabel = document.createElement('p');
+                nameLabel.style.margin = '5px 0';
+                nameLabel.style.fontSize = '12px';
+                nameLabel.style.color = 'azure';
+                nameLabel.style.wordBreak = 'break-word';
+                nameLabel.textContent = unitName;
+
+                const elementBadge = document.createElement('div');
+                elementBadge.style.position = 'absolute';
+                elementBadge.style.bottom = '-18px';
+                elementBadge.style.left = '-15px';
+                elementBadge.style.width = '38px';
+                elementBadge.style.height = '38px';
+                elementBadge.style.borderRadius = '50%';
+                elementBadge.style.display = 'flex';
+                elementBadge.style.alignItems = 'center';
+                elementBadge.style.justifyContent = 'center';
+                elementBadge.style.zIndex = '5';
+                elementBadge.style.fontSize = '10px';
+                elementBadge.style.fontWeight = 'bold';
+                elementBadge.style.color = 'white';
+                elementBadge.style.border = 'none';
+                elementBadge.style.background = 'transparent';
+                
+                const unitElement = unit.Element || unit.Elements;
+                if (unitElement) {
+                    const elementName = getDisplayElementName(unitElement);
+                    createElementBadgeContent(elementName, elementBadge);
+                }
+                
+                imgWrapper.appendChild(imgElement);
+                imgWrapper.appendChild(elementBadge);
+                card.appendChild(imgWrapper);
+                card.appendChild(nameLabel);
+                
+                card.onmouseover = () => card.style.transform = 'scale(1.05)';
+                card.onmouseout = () => card.style.transform = 'scale(1)';
+                
+                grid.appendChild(card);
+            });
+        }
+
+async function openGrid(element) {
+            slot = element;
+            console.log('openGrid called - unitTags keys:', Object.keys(unitTags).length);
+            document.getElementById('UnitSelection').style.display = 'flex';
+            if (Object.keys(unitTags).length === 0) {
+                console.log('Loading unitTags...');
+                await loadUnitTags();
+            }
+            console.log('Calling populateTagFilters, unitTags keys:', Object.keys(unitTags).length);
+            populateTagFilters();
+            selectedTags = [];
+            console.log('Calling showGrid with selectedTags:', selectedTags);
+            await showGrid();
+        }
+
+        function closeGrid() {
+            document.getElementById('UnitSelection').style.display = 'none';
+        }
+
+async function pick(unitName, unitImg) {
+            if (Object.keys(unitTags).length === 0) {
+                await loadUnitTags();
+            }
+            selectedUnitName = unitName;
+            const baseFilename = sanitizeFilename(unitName) + '.png';
+            selectedUnitImg = `images/Units/${baseFilename}`;
+            selectedEnchantName = 'None';
+            selectedEnchantImg = '';
+            isShinySelected = false;
+            
+            document.getElementById('detailName').textContent = unitName;
+            document.getElementById('detailImg').src = selectedUnitImg;
+            
+            const shinyToggle = document.getElementById('shinyToggle');
+            shinyToggle.classList.remove('shiny');
+            
+            const unit = units.find(u => u.Name === unitName);
+            
+            if (unit && unit.Rarity === 'Hero') {
+                shinyToggle.classList.add('disabled');
+            } else {
+                shinyToggle.classList.remove('disabled');
+            }
+
+            displayActives(unit);
+            displayPassives(unit);
+            renderEnchantTable();
+            
+            document.getElementById('enchantSection').style.display = 'block';
+            document.getElementById('shinyToggle').parentElement.style.display = 'block';
+            document.getElementById('buttonGroup').style.display = 'flex';
+            closeGrid();
+            document.getElementById('UnitDetail').style.display = 'flex';
+            
+            setTimeout(() => attachSliderEvents(), 50);
+        }
+
+        function displayActives(unit) {
+            const activesBox = document.getElementById('activesBox');
+            const activesText = document.getElementById('activesText');
+            
+            if (unit && unit.Actives && Array.isArray(unit.Actives)) {
+                let content = '';
+                unit.Actives.forEach((active, index) => {
+                    if (index > 0) content += '\n\n';
+                    if (active.Name && active.Description) {
+                        content += `${active.Name}: ${active.Description}`;
+                    }
+                });
+                
+                if (content) {
+                    activesText.textContent = content;
+                    activesBox.classList.add('visible');
+                } else {
+                    activesBox.classList.remove('visible');
+                    activesText.textContent = '';
+                }
+            } else {
+                activesBox.classList.remove('visible');
+                activesText.textContent = '';
+            }
+        }
+
+        function displayPassives(unit) {
+            const passiveBox = document.getElementById('passiveBox');
+            const passiveText = document.getElementById('passiveText');
+            
+            if (unit && unit.Passives && typeof unit.Passives === 'object') {
+                let content = '';
+                for (const [passiveName, passiveDesc] of Object.entries(unit.Passives)) {
+                    if (passiveName.toUpperCase() === 'NO PASSIVE') continue;
+                    if (content) content += '\n\n';
+                    content += `${passiveName}: ${passiveDesc}`;
+                }
+                
+                if (content) {
+                    passiveText.textContent = content;
+                    passiveBox.classList.add('visible');
+                } else {
+                    passiveBox.classList.remove('visible');
+                    passiveText.textContent = '';
+                }
+            } else {
+                passiveBox.classList.remove('visible');
+                passiveText.textContent = '';
+            }
+        }
+
+        function toggleShiny(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const shinyToggle = document.getElementById('shinyToggle');
+            if (shinyToggle.classList.contains('disabled')) return;
+
+            isShinySelected = !isShinySelected;
+            if (isShinySelected) {
+                shinyToggle.classList.add('shiny');
+            } else {
+                shinyToggle.classList.remove('shiny');
+            }
+            if (selectedUnitName) {
+                const baseFilename = sanitizeFilename(selectedUnitName) + '.png';
+                console.log(`Loading shiny: images/Units/${isShinySelected ? 'Shiny_' : ''}${baseFilename}`);
+                selectedUnitImg = `images/Units/${isShinySelected ? 'Shiny_' : ''}${baseFilename}`;
+                document.getElementById('detailImg').src = selectedUnitImg + '?t=' + Date.now();
+            }
+        }
+
+        function attachSliderEvents() {
+            const shinyToggle = document.getElementById('shinyToggle');
+            if (shinyToggle) {
+                shinyToggle.removeAttribute('tabindex');
+                shinyToggle.style.outline = 'none';
+                const newToggle = shinyToggle.cloneNode(true);
+                shinyToggle.parentNode.replaceChild(newToggle, shinyToggle);
+                
+                const toggle = document.getElementById('shinyToggle');
+                toggle.style.outline = 'none';
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!toggle.classList.contains('disabled')) {
+                        toggleShiny(e);
+                    }
+                });
+                toggle.addEventListener('keydown', function(e) {
+                    if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !toggle.classList.contains('disabled')) {
+                        e.preventDefault();
+                        toggleShiny(e);
+                    }
+                });
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            attachSliderEvents();
+        });
+
+        function renderEnchantTable() {
+            const table = document.getElementById('enchantTable');
+            table.innerHTML = '';
+            let currentRow;
+
+            enchantments.forEach((enchantment, index) => {
+                if (index % 5 === 0) {
+                    currentRow = document.createElement('tr');
+                    table.appendChild(currentRow);
+                }
+
+                const cell = document.createElement('td');
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'enchant-btn' + (selectedEnchantName === enchantment.name ? ' selected' : '');
+                button.onclick = () => selectEnchant(enchantment);
+
+                if (enchantment.name === 'None') {
+                    const noImg = document.createElement('span');
+                    noImg.style.color = 'azure';
+                    noImg.style.fontSize = '12px';
+                    noImg.textContent = 'No';
+                    button.appendChild(noImg);
+                } else {
+                    const img = document.createElement('img');
+                    img.src = enchantment.img;
+                    img.alt = enchantment.name;
+                    img.onerror = () => img.style.opacity = '0.4';
+                    button.appendChild(img);
+                }
+
+                const label = document.createElement('div');
+                label.className = 'enchant-label';
+                label.textContent = enchantment.label;
+
+                cell.appendChild(button);
+                cell.appendChild(label);
+                currentRow.appendChild(cell);
+            });
+
+            if (currentRow && currentRow.children.length < 5) {
+                for (let i = currentRow.children.length; i < 5; i++) {
+                    currentRow.appendChild(document.createElement('td'));
+                }
+            }
+        }
+
+        function selectEnchant(enchantment) {
+            if (selectedEnchantName === enchantment.name) {
+                selectedEnchantName = 'None';
+                selectedEnchantImg = '';
+            } else {
+                selectedEnchantName = enchantment.name;
+                selectedEnchantImg = enchantment.name === 'None' ? '' : enchantment.img;
+            }
+            renderEnchantTable();
+        }
+
+        function addUnit() {
+            if (!slot || !selectedUnitName) return;
+
+            const unit = units.find(u => u.Name === selectedUnitName);
+            const container = slot.closest('.slot-container');
+            const enchantBadge = container.querySelector('.enchant-badge');
+            const elementBadge = container.querySelector('.element-badge');
+            
+            slot.src = selectedUnitImg;
+            slot.alt = selectedUnitName;
+            slot.dataset.unitName = selectedUnitName;
+            slot.dataset.isShiny = isShinySelected;
+            slot.dataset.enchantName = selectedEnchantName;
+            container.classList.add('filled');
+            
+            if (selectedEnchantImg) {
+                enchantBadge.innerHTML = `<img src="${selectedEnchantImg}" alt="${selectedEnchantName}">`;
+                enchantBadge.classList.add('visible');
+            } else {
+                enchantBadge.classList.remove('visible');
+                enchantBadge.innerHTML = '';
+            }
+
+            const unitElement = unit.Element || unit.Elements;
+            if (unitElement) {
+                const elementName = getDisplayElementName(unitElement);
+                
+                elementBadge.innerHTML = '';
+                createElementBadgeContent(elementName, elementBadge);
+                elementBadge.classList.add('visible');
+            } else {
+                elementBadge.classList.remove('visible');
+                elementBadge.innerHTML = '';
+            }
+
+            applyUnitStyling(slot, unit);
+            closeDetail();
+            closeGrid();
+        }
+
+        function applyUnitStyling(slotElement, unit) {
+            if (isShinySelected) {
+                slotElement.style.background = 'linear-gradient(#000, #000) padding-box, linear-gradient(90deg, red, yellow, lime, cyan, blue, magenta, red) border-box';
+                slotElement.style.borderColor = 'transparent';
+                slotElement.style.borderWidth = '3px';
+                slotElement.style.boxShadow = `0 0 20px #FF1493, inset 0 0 15px rgba(255, 20, 147, 0.3)`;
+            } else if (unit && rarityGradient[unit.Rarity]) {
+                const [color1, color2] = rarityGradient[unit.Rarity];
+                slotElement.style.background = `linear-gradient(#000, #000) padding-box, linear-gradient(135deg, ${color1}, ${color2}) border-box`;
+                slotElement.style.borderColor = 'transparent';
+                slotElement.style.borderWidth = '3px';
+                slotElement.style.boxShadow = `0 0 12px ${color2}, inset 0 0 8px rgba(${hexToRgb(color2)}, 0.2)`;
+            } else {
+                slotElement.style.borderColor = 'white';
+                slotElement.style.boxShadow = 'none';
+                slotElement.style.background = 'none';
+            }
+        }
+
+        function clearSlot(event) {
+            event.stopPropagation();
+            const deleteBtn = event.target;
+            const container = deleteBtn.closest('.slot-container');
+            const slotElement = container.querySelector('.unit-slot');
+            const enchantBadge = container.querySelector('.enchant-badge');
+            const elementBadge = container.querySelector('.element-badge');
+            const tagBadges = container.querySelector('.tag-badges');
+            
+            slotElement.src = 'images/Plus.png';
+            slotElement.alt = '';
+            slotElement.dataset.unitName = '';
+            slotElement.dataset.isShiny = '';
+            slotElement.dataset.enchantName = '';
+            slotElement.style.background = 'none';
+            slotElement.style.borderColor = 'white';
+            slotElement.style.boxShadow = 'none';
+            enchantBadge.classList.remove('visible');
+            enchantBadge.innerHTML = '';
+            elementBadge.classList.remove('visible');
+            elementBadge.innerHTML = '';
+            container.classList.remove('filled');
+        }
+
+        function showUnitInfo(event) {
+            event.stopPropagation();
+            const infoBtn = event.target;
+            const container = infoBtn.closest('.slot-container');
+            const slotElement = container.querySelector('.unit-slot');
+            const unitName = slotElement.dataset.unitName;
+            
+            if (!unitName || !units) return;
+
+            const unit = units.find(u => u.Name === unitName);
+            if (!unit) return;
+
+            document.getElementById('detailName').textContent = unitName;
+            document.getElementById('detailImg').src = slotElement.src;
+            
+            displayActives(unit);
+            displayPassives(unit);
+            
+            document.getElementById('enchantSection').style.display = 'none';
+            document.getElementById('shinyToggle').parentElement.style.display = 'none';
+            document.getElementById('buttonGroup').style.display = 'none';
+            
+            document.getElementById('UnitDetail').style.display = 'flex';
+        }
+
+        function closeDetail() {
+            document.getElementById('UnitDetail').style.display = 'none';
+            document.getElementById('buttonGroup').style.display = 'flex';
+            selectedUnitName = null;
+            selectedUnitImg = null;
+        }
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result 
+                ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` 
+                : '255, 255, 255';
+        }
+
+function addTeam() {
+    const teamsContainer = document.getElementById('teamsContainer');
+    const addBtn = document.getElementById('addTeamBtn');
+    
+    const team1Section = document.querySelector('.team-section');
+    const templateRow = team1Section.querySelector('.row[data-team="1"]').cloneNode(true);
+    
+
+    templateRow.querySelectorAll('.slot-container').forEach(container => {
+        const slot = container.querySelector('.unit-slot');
+        const enchantBadge = container.querySelector('.enchant-badge');
+        const elementBadge = container.querySelector('.element-badge');
+        slot.src = 'images/Plus.png';
+        slot.alt = '';
+        Object.keys(slot.dataset).forEach(key => delete slot.dataset[key]);
+        slot.style.cssText = '';
+        enchantBadge.classList.remove('visible');
+        enchantBadge.innerHTML = '';
+        elementBadge.classList.remove('visible');
+        elementBadge.innerHTML = '';
+        container.classList.remove('filled');
+    });
+    
+
+    const newTeamSection = document.createElement('div');
+    newTeamSection.className = 'team-section';
+    newTeamSection.style.marginBottom = '20px';
+    
+    const teamHeader = document.createElement('div');
+    teamHeader.style.display = 'flex';
+    teamHeader.style.alignItems = 'center';
+    teamHeader.style.justifyContent = 'center';
+    teamHeader.style.gap = '15px';
+    teamHeader.style.marginBottom = '10px';
+    
+    const h1 = document.createElement('h1');
+    h1.textContent = `Team ${nextTeamNumber}`;
+    h1.style.margin = '0';
+    const deleteTeamBtn = document.createElement('button');
+    deleteTeamBtn.textContent = '×';
+    deleteTeamBtn.className = 'delete-team-btn';
+    deleteTeamBtn.style.background = '#ff4d4d';
+    deleteTeamBtn.style.color = 'white';
+    deleteTeamBtn.style.border = 'none';
+    deleteTeamBtn.style.borderRadius = '50%';
+    deleteTeamBtn.style.width = '30px';
+    deleteTeamBtn.style.height = '30px';
+    deleteTeamBtn.style.fontSize = '18px';
+    deleteTeamBtn.style.cursor = 'pointer';
+    deleteTeamBtn.onclick = function(e) {
+        e.stopPropagation();
+        newTeamSection.remove();
+        setTimeout(() => renumberTeams(), 100);
+    };
+
+    teamHeader.appendChild(h1);
+    teamHeader.appendChild(deleteTeamBtn);
+    
+
+    templateRow.dataset.team = nextTeamNumber;
+    templateRow.querySelectorAll('.unit-slot').forEach(slot => {
+        slot.onclick = () => openGrid(slot);
+    });
+    templateRow.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = (e) => clearSlot(e);
+    });
+    templateRow.querySelectorAll('.info-btn').forEach(btn => {
+        btn.onclick = (e) => showUnitInfo(e);
+    });
+    
+    newTeamSection.appendChild(teamHeader);
+    newTeamSection.appendChild(templateRow);
+    teamsContainer.insertBefore(newTeamSection, addBtn);
+    
+    nextTeamNumber++;
+}
+
+window.onclick = function(event) {
+            const gridOverlay = document.getElementById('UnitSelection');
+            const detailOverlay = document.getElementById('UnitDetail');
+            
+            if (event.target === gridOverlay) {
+                closeGrid();
+            }
+            if (event.target === detailOverlay) {
+                closeDetail();
+            }
+        }
+
+        function serializeTeam() {
+    const teamsContainer = document.getElementById('teamsContainer');
+    const teamSections = teamsContainer.querySelectorAll('.team-section');
+    const teamData = [];
+    
+    teamSections.forEach((section) => {
+        const h1 = section.querySelector('h1');
+        const row = section.querySelector('.row[data-team]');
+        
+        if (h1 && row) {
+            const slots = Array.from(row.querySelectorAll('.slot-container')).map(container => {
+                const slot = container.querySelector('.unit-slot');
+                const enchantBadgeDiv = container.querySelector('.enchant-badge');
+                const elementBadgeDiv = container.querySelector('.element-badge');
+                return {
+                    src: slot.src,
+                    alt: slot.alt,
+                    dataset: Object.fromEntries(Object.entries(slot.dataset)),
+                    style: slot.style.cssText,
+                    enchantBadgeInnerHTML: enchantBadgeDiv ? enchantBadgeDiv.innerHTML : '',
+                    enchantBadgeVisible: enchantBadgeDiv ? enchantBadgeDiv.classList.contains('visible') : false,
+                    elementBadgeInnerHTML: elementBadgeDiv ? elementBadgeDiv.innerHTML : '',
+                    elementBadgeVisible: elementBadgeDiv ? elementBadgeDiv.classList.contains('visible') : false,
+                    containerClasses: Array.from(container.classList)
+                };
+            });
+
+            teamData.push({ 
+                h1: h1.textContent.trim(),
+                slots 
+            });
+        }
+    });
+    
+    console.log('Serialized', teamData.length, 'teams:', teamData);
+    return teamData;
+}
+
+function saveTeam() {
+    const name = document.getElementById('teamNameInput').value.trim();
+    if (!name) {
+        return;
+    }
+    const savedTeams = JSON.parse(localStorage.getItem('savedTeams') || '{}');
+    savedTeams[name] = serializeTeam();
+    localStorage.setItem('savedTeams', JSON.stringify(savedTeams));
+    document.getElementById('teamNameInput').value = '';
+    updateSavedTeamsList();
+}
+
+function updateSavedTeamsList() {
+    const select = document.getElementById('savedTeamsList');
+    const savedTeams = JSON.parse(localStorage.getItem('savedTeams') || '{}');
+    select.innerHTML = '<option value="">Select team...</option>';
+    Object.keys(savedTeams).forEach(name => {
+        const option = document.createElement('option');
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+    });
+}
+
+function deleteSavedTeam() {
+    const select = document.getElementById('savedTeamsList');
+    const name = select.value;
+    if (!name) {
+        return;
+    }
+    
+    const savedTeams = JSON.parse(localStorage.getItem('savedTeams') || '{}');
+    delete savedTeams[name];
+    localStorage.setItem('savedTeams', JSON.stringify(savedTeams));
+    updateSavedTeamsList();
+}
+
+function loadTeam() {
+    const select = document.getElementById('savedTeamsList');
+    const name = select.value;
+    if (!name) return;
+    
+    const savedTeams = JSON.parse(localStorage.getItem('savedTeams') || '{}');
+    const teamData = savedTeams[name];
+    if (!teamData || !Array.isArray(teamData)) {
+        return;
+    }
+    console.log('Loading team data:', teamData);
+    
+    const teamsContainer = document.getElementById('teamsContainer');
+    const teamSections = teamsContainer.querySelectorAll('.team-section');
+    
+
+    teamSections.forEach(section => {
+        const row = section.querySelector('.row[data-team]');
+        if (row) {
+            Array.from(row.querySelectorAll('.slot-container')).forEach(container => {
+                const slot = container.querySelector('.unit-slot');
+                const enchantBadge = container.querySelector('.enchant-badge');
+                const elementBadge = container.querySelector('.element-badge');
+                slot.src = 'images/Plus.png';
+                slot.alt = '';
+                Object.keys(slot.dataset).forEach(key => delete slot.dataset[key]);
+                slot.style.cssText = '';
+                enchantBadge.classList.remove('visible');
+                enchantBadge.innerHTML = '';
+                elementBadge.classList.remove('visible');
+                elementBadge.innerHTML = '';
+                container.classList.remove('filled');
+            });
+        }
+    });
+    
+
+    const allTeamSections = Array.from(teamsContainer.querySelectorAll('.team-section'));
+    for (let i = 1; i < allTeamSections.length; i++) {
+        allTeamSections[i].remove();
+    }
+    
+
+    const addBtn = document.getElementById('addTeamBtn');
+    teamData.forEach((team, teamIndex) => {
+        if (teamIndex === 0) {
+            const team1Section = teamsContainer.querySelector('.team-section');
+            const team1Row = team1Section.querySelector('.row[data-team="1"]');
+            const team1H1 = team1Section.querySelector('h1');
+            team1H1.textContent = team.h1 || 'Team 1';
+            
+            team.slots.forEach((slotData, slotIndex) => {
+                const container = team1Row.children[slotIndex];
+                if (container) {
+                    const slot = container.querySelector('.unit-slot');
+                    const enchantBadge = container.querySelector('.enchant-badge');
+                    const elementBadge = container.querySelector('.element-badge');
+                    
+                    slot.src = slotData.src || 'images/Plus.png';
+                    slot.alt = slotData.alt || '';
+                    Object.assign(slot.dataset, slotData.dataset || {});
+                    slot.style.cssText = slotData.style || '';
+                    
+
+                    if (slotData.enchantBadgeInnerHTML) {
+                        enchantBadge.innerHTML = slotData.enchantBadgeInnerHTML;
+                    }
+                    if (slotData.enchantBadgeVisible) {
+                        enchantBadge.classList.add('visible');
+                    } else {
+                        enchantBadge.classList.remove('visible');
+                    }
+                    
+
+                    if (slotData.elementBadgeInnerHTML) {
+                        elementBadge.innerHTML = slotData.elementBadgeInnerHTML;
+                    }
+                    if (slotData.elementBadgeVisible) {
+                        elementBadge.classList.add('visible');
+                    } else {
+                        elementBadge.classList.remove('visible');
+                    }
+
+                    (slotData.containerClasses || []).forEach(cls => container.classList.add(cls));
+                    if (slot.dataset.unitName) container.classList.add('filled');
+                }
+            });
+        } else {
+            addTeamFromData(team, teamIndex + 1);
+        }
+    });
+    
+    nextTeamNumber = teamData.length + 1;
+}
+
+function addTeamFromData(teamData, teamNum) {
+    const teamsContainer = document.getElementById('teamsContainer');
+    const addBtn = document.getElementById('addTeamBtn');
+    
+    const templateRow = document.querySelector('.row[data-team="1"]').cloneNode(true);
+    
+    const newTeamSection = document.createElement('div');
+    newTeamSection.className = 'team-section';
+    newTeamSection.style.marginBottom = '20px';
+    
+    const teamHeader = document.createElement('div');
+    teamHeader.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:10px;';
+    
+    const h1 = document.createElement('h1');
+    h1.textContent = teamData.h1 || `Team ${teamNum}`;
+    const deleteTeamBtn = document.createElement('button');
+    deleteTeamBtn.textContent = '×';
+    deleteTeamBtn.className = 'delete-team-btn';
+    deleteTeamBtn.style.cssText = 'background:#ff4d4d;color:white;border:none;border-radius:50%;width:30px;height:30px;font-size:18px;cursor:pointer;';
+    deleteTeamBtn.onclick = function(e) {
+        e.stopPropagation();
+        newTeamSection.remove();
+        renumberTeams();
+    };
+    
+    teamHeader.appendChild(h1);
+    teamHeader.appendChild(deleteTeamBtn);
+    newTeamSection.appendChild(teamHeader);
+    
+    templateRow.dataset.team = teamNum;
+    teamData.slots.forEach((slotData, slotIndex) => {
+        const container = templateRow.children[slotIndex];
+        if (container) {
+            const slot = container.querySelector('.unit-slot');
+            const enchantBadge = container.querySelector('.enchant-badge');
+            const elementBadge = container.querySelector('.element-badge');
+            
+            slot.src = slotData.src || 'images/Plus.png';
+            slot.alt = slotData.alt || '';
+            Object.assign(slot.dataset, slotData.dataset || {});
+            slot.style.cssText = slotData.style || '';
+            
+            if (slotData.enchantBadgeInnerHTML) {
+                enchantBadge.innerHTML = slotData.enchantBadgeInnerHTML;
+            }
+            if (slotData.enchantBadgeVisible) {
+                enchantBadge.classList.add('visible');
+            } else {
+                enchantBadge.classList.remove('visible');
+            }
+            
+            if (slotData.elementBadgeInnerHTML) {
+                elementBadge.innerHTML = slotData.elementBadgeInnerHTML;
+            }
+            if (slotData.elementBadgeVisible) {
+                elementBadge.classList.add('visible');
+            } else {
+                elementBadge.classList.remove('visible');
+            }
+
+            (slotData.containerClasses || []).forEach(cls => container.classList.add(cls));
+            if (slot.dataset.unitName) container.classList.add('filled');
+        }
+    });
+    
+
+    templateRow.querySelectorAll('.unit-slot').forEach(slot => slot.onclick = () => openGrid(slot));
+    templateRow.querySelectorAll('.delete-btn').forEach(btn => btn.onclick = e => clearSlot(e));
+    templateRow.querySelectorAll('.info-btn').forEach(btn => btn.onclick = e => showUnitInfo(e));
+    
+    newTeamSection.appendChild(templateRow);
+    teamsContainer.insertBefore(newTeamSection, addBtn);
+}
+
+function clearTeams() {
+    document.querySelectorAll('.slot-container').forEach(container => {
+        const slot = container.querySelector('.unit-slot');
+        const enchantBadge = container.querySelector('.enchant-badge');
+        const elementBadge = container.querySelector('.element-badge');
+        slot.src = 'images/Plus.png';
+        slot.dataset.unitName = '';
+        slot.dataset.isShiny = '';
+        slot.dataset.enchantName = '';
+        slot.style.background = 'none';
+        slot.style.borderColor = 'white';
+        slot.style.boxShadow = 'none';
+        enchantBadge.classList.remove('visible');
+        enchantBadge.innerHTML = '';
+        elementBadge.classList.remove('visible');
+        elementBadge.innerHTML = '';
+        container.classList.remove('filled');
+    });
+}
+
+function renumberTeams() {
+    const teamSections = Array.from(document.querySelectorAll('#teamsContainer > div.team-section'));
+    teamSections.forEach((section, index) => {
+        const h1 = section.querySelector('h1');
+        const row = section.querySelector('.row');
+        if (h1 && row) {
+            const newNumber = index + 1;
+            h1.textContent = `Team ${newNumber}`;
+            row.dataset.team = newNumber;
+        }
+    });
+    nextTeamNumber = teamSections.length + 1;
+}
+
+window.addEventListener('load', async () => {
+            await loadUnitTags();
+            updateSavedTeamsList();
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
